@@ -4,7 +4,5 @@ ThisBuild / scalaVersion := "3.1.2"
 lazy val root = (project in file("."))
   .settings(
     name := "fp1",
-    idePackagePrefix := Some("com.tkroman.kpi.y2022.l1"),
-    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test,
+    libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "0.7.29" % Test
   )
-
