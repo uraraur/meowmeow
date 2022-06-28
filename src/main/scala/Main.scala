@@ -105,6 +105,3 @@ def sequence[A](xs: List[Either[String, A]]): Either[String, List[A]] = {
 
 @main def run() =
   println("Hello")
-  val n1: List[Int] = List(2, 3, 4)
-  val n2: List[Int] = List(1, 4, 9, 16, 25)
-  println(List.intersectBy(n1, n2, (x,y) => x*x == y))
