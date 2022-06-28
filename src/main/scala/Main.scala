@@ -24,16 +24,16 @@ enum List[+A]:
     go(this, List.Nil)
   }
 
-  def contains[A](a: A): Boolean= {
-    def cont[A](xs: List[A], a: A): Boolean = {
+  def contains(a: A, f: (A, A) => Boolean = (_: A) == (_: A)): Boolean= {
+    def cont(xs: List[A], a: A, f: (A, A) => Boolean): Boolean = {
       xs match{
         case List.Nil => false
         case List.Cons(h,t) =>
           if a == h then true
-          else cont(t, a)
+          else cont(t, a, f)
       }
     }
-    cont(this, a)
+    cont(this, a, f)
   }
 
 object List:
@@ -77,12 +77,12 @@ object List:
   }
 
   //intersert2.0
-  def intersectBy[A](xs: List[A], ys: List[A], f: (A) => A): List[A] = {
-    def found[A](xs: List[A], ys: List[A], zs: List[A],f: (A) => A ): List[A] = {
+  def intersectBy[A](xs: List[A], ys: List[A], f: (A, A) => Boolean): List[A] = {
+    def found[A](xs: List[A], ys: List[A], zs: List[A], f: (A, A) => Boolean ): List[A] = {
       xs match{
         case List.Nil => zs
         case List.Cons(h, t) =>
-          if ys.contains(f(h)) then found(t, ys, List.Cons(h, zs), f)
+          if ys.contains(h, f) then found(t, ys, List.Cons(h, zs), f)
           else found(t, ys, zs, f)
       }
     }
@@ -105,3 +105,6 @@ def sequence[A](xs: List[Either[String, A]]): Either[String, List[A]] = {
 
 @main def run() =
   println("Hello")
+  val n1: List[Int] = List(2, 3, 4, 9, 16)
+  val n2: List[Int] = List(1, 4, 5, 16, 25, 0)
+  println(List.intersectBy(n1, n2, (x,y) => x*x == y))
