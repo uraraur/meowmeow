@@ -25,27 +25,20 @@ class IntegerSuite extends ScalaCheckSuite {
       List.intersect(n1, List.Nil) == List.Nil
     }
   }
-   property("Intersection of disjoint lists") {
-    val n1: List[Int] = List(1, 2, 3)
-    val n2: List[Int] = List(4, 5, 6)
-      List.intersect(n1, n2) == List.Nil
-  }
-  property("Intersection") {
-    val n1: List[Int] = List(1, 2, 3, 4, 5, 6)
-    val n2: List[Int] = List(4, 5, 6, 9)
-      List.intersect(n1, n2) == List(6, 5, 4)
-  }
-  property("IntersectionBy") {
-    val n1: List[Int] = List(2, 3, 4, 9, 16)
-    val n2: List[Int] = List(1, 4, 5, 16, 25, 0)
-      List.intersectBy(n1, n2, x => x*x) == List(4, 2)
-  }
-  property("Spans") {
-    val n1: List[Int] = List(1, 0, 2, 0, 3, 4, 5, 6, 0)
-      List.spans(n1, 0) == List(List(1),List(2),List(3,4,5,6),List.Nil)
-  }
   property("Spans1") {
     val n1: List[Int] = List(0)
       List.spans(n1, 0) == List(List.Nil, List.Nil)
+  }
+  property("Intersection is a subset of both sets"){
+    forAll{ (n1: List[Int], n2: List[Int]) =>
+      var temp: List[Int] = List.intersect(n1, n2)
+      var m: Boolean = true
+      while temp != List.Nil do
+        temp match{
+          case List.Cons(h, t) => m = m && n2.contains(h) && n1.contains(h) 
+          temp = t
+        }
+      m
+    }   
   }
 }

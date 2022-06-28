@@ -24,8 +24,8 @@ enum List[+A]:
     go(this, List.Nil)
   }
 
-  def contains[A](a: A):Boolean= {
-    def cont[A](xs: List[A], a:A):Boolean = {
+  def contains[A](a: A): Boolean= {
+    def cont[A](xs: List[A], a: A): Boolean = {
       xs match{
         case List.Nil => false
         case List.Cons(h,t) =>
@@ -46,7 +46,7 @@ object List:
   
   //spans
   def spans[A](xs: List[A], sep: A): List[List[A]] = {
-    def go(r: List[List[A]], buf: List[A], xs:List[A], sep: A): List[List[A]] = {
+    def go(r: List[List[A]], buf: List[A], xs: List[A], sep: A): List[List[A]] = {
       xs match {
         case List.Nil => List.Cons(buf, r)
         case List.Cons(h,t) =>
@@ -54,10 +54,10 @@ object List:
           else go(r, List.Cons(h, buf), t, sep)
       }
     }
-    def rev(xs:List[List[A]]): List[List[A]] = { 
+    def rev(xs: List[List[A]]): List[List[A]] = { 
       xs match{
         case List.Nil => List.Nil
-        case List.Cons(h,t) => List.Cons(h.reverse, rev(t)) //звернули бошку тупа
+        case List.Cons(h,t) => List.Cons(h.reverse, rev(t))
       }
     }
     rev(go(List.Nil, List.Nil, xs, sep)).reverse
@@ -65,7 +65,7 @@ object List:
     
   //intesert
   def intersect[A](xs: List[A], ys: List[A]): List[A] = {
-    def found[A](xs: List[A], ys: List[A], zs:List[A]):List[A] = {
+    def found[A](xs: List[A], ys: List[A], zs: List[A]): List[A] = {
       xs match{
         case List.Nil => zs
         case List.Cons(h, t) =>
@@ -78,7 +78,7 @@ object List:
 
   //intersert2.0
   def intersectBy[A](xs: List[A], ys: List[A], f: (A) => A): List[A] = {
-    def found[A](xs: List[A], ys: List[A], zs:List[A],f: (A) => A ):List[A] = {
+    def found[A](xs: List[A], ys: List[A], zs: List[A],f: (A) => A ): List[A] = {
       xs match{
         case List.Nil => zs
         case List.Cons(h, t) =>
@@ -88,6 +88,20 @@ object List:
     }
     found(xs, ys, List.Nil, f)
   }
+
+def sequence[A](xs: List[Either[String, A]]): Either[String, List[A]] = {
+  def go(xs: List[Either[String, A]], r: List[A]): Either[String, List[A]] = {
+      xs match {
+        case List.Nil => Right(r)
+        case List.Cons(h,t) =>
+          h match{
+            case Left(w) => Left(w)
+            case Right(w) => go(t, List.Cons(w, r))
+          }
+      }
+  }
+  go(xs, List.Nil)
+}
 
 @main def run() =
   println("Hello")
